@@ -1,0 +1,20 @@
+#register-form {
+  animation-name: exccc;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
+
+  overflow: hidden;
+  max-height: 0;
+}
+
+@keyframes exccc {
+  0% {
+    overflow: hidden;
+    max-height: 0;
+  }
+  100% {
+    max-height: 500px;
+    overflow: visible;
+  }
+}

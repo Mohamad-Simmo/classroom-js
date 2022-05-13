@@ -1,5 +1,5 @@
 <?php
-    $title = 'Login';
-    $childView = 'templates/_login.php';
-    include('layout.php');
+    $title = 'Sign in';
+    $content = 'templates/_entry.php';
+    include('templates/layout.php');
 ?>

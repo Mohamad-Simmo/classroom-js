@@ -16,7 +16,7 @@
 </head>
 
 <body class="bg-light">
-  <?php include($childView); ?>
+  <?php include($content); ?>
 
 
   <script

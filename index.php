@@ -1,5 +1,9 @@
 <?php
-    $title = 'Sign in';
-    $content = 'templates/_entry.php';
-    include('templates/layout.php');
+    $title = 'Home';
+    include('templates/header.php');
+?>
+<h1 class="fw-normal">Classes</h1>
+<hr>
+<?php
+    include('templates/footer.php');
 ?>

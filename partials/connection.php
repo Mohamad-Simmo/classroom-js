@@ -1,14 +1,7 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$db = "university_project";
-
-// Create connection
-$conn = mysqli_connect($servername, $username, $password, $db);
-
-// Check connection
-if (mysqli_connect_errno()) {
-  echo "Error";
-}
+  define("SERVER", "localhost");
+  define("USERNAME", "root");
+  define("PASSWORD", "");
+  define("DATABASE", "university_project");
+  $conn = mysqli_connect(SERVER, USERNAME, PASSWORD, DATABASE) or die(mysqli_error($conn));
 ?>

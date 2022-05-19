@@ -164,12 +164,10 @@
   }
 ?>
 
-<div id="div-register" style="height: 100vh;"
+<div id="div-register vh-100"
   class="col-lg-3 col-md-4 col-sm-6 col-8 text-center mx-auto d-flex flex-column justify-content-center">
-  <img src="images/book.png"
-    class="img-fluid mx-auto mt-1 mb-1 d-none d-sm-block" alt="" style="width: 75px;
-    height: auto;">
-  <h1 class="fw-normal mb-4 mb-sm-2">Register</h1>
+  <i class="bi bi-book-half mb-1" style="font-size: 5rem;"></i>
+  <h1 class="fw-normal mb-4 mb-sm-2" style="margin-top:-15px;">Register</h1>
 
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
     method="post" class="text-center d-flex flex-column justify-content-center">
@@ -179,13 +177,13 @@
       <input type="radio" class="btn-check" name="options-outlined"
         id="student-outlined" autocomplete="off" value="student"
         <?php echo ($student ? ' checked':'');?>>
-      <label class="btn btn-lg btn-outline-dark"
+      <label class="btn btn-lg btn-outline-success"
         for="student-outlined">Student</label>
       <div>Or</div>
       <input type="radio" class="btn-check" name="options-outlined"
         id="teacher-outlined" value="teacher" autocomplete="off"
         required<?php echo ($teacher ? ' checked':'');?>>
-      <label class="btn btn-lg btn-outline-dark"
+      <label class="btn btn-lg btn-outline-success"
         for="teacher-outlined">Teacher</label>
     </div>
 
@@ -197,7 +195,7 @@
       <div class="form-floating col-6 mb-1">
         <input type="text" class="form-control <?php echo $fnameErrClass;?>"
           id="inputFname" placeholder="First name" name="fname"
-          value="<?php echo $fnameVal;?>">
+          value="<?php echo $fnameVal;?>" autocomplete="first-name">
         <label for="inputFname">First name</label>
         <div class="invalid-feedback text-start ms-2 mt-0">
           <?php echo $fnameErrText; ?>
@@ -207,7 +205,7 @@
       <div class="form-floating col-6 mb-1">
         <input type="text" class="form-control <?php echo $lnameErrClass; ?>"
           id="inputLname" placeholder="Last name" name="lname"
-          value="<?php echo $lnameVal; ?>">
+          value="<?php echo $lnameVal; ?>" autocomplete="last-name">
         <label for="inputLname">Last name</label>
         <div class="invalid-feedback text-start ms-2 mt-0">
           <?php echo $lnameErrText; ?>
@@ -219,7 +217,7 @@
     <div class="form-floating mb-1">
       <input type="email" class="form-control <?php echo $emailErrClass;?>"
         id="inputEmail" placeholder="Email" name="email"
-        value="<?php echo $emailAddrVal;?>">
+        value="<?php echo $emailAddrVal;?>" autocomplete="new-email">
       <label for="inputEmail">Email address</label>
       <div class="invalid-feedback text-start ms-2 mt-0">
         <?php echo $emailErrText; ?>

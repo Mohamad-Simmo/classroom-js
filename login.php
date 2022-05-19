@@ -7,12 +7,10 @@
     exit;
   }
 
-
   $emailErrClass = $passwordErrClass = $loginErrText = '';
   $email = $password = '';
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     if (empty($_POST["email"])) {
       loginError();
     }
@@ -56,9 +54,7 @@
     $emailErrClass = "is-invalid";
     $passwordErrClass = "is-invalid";
     $loginErrText = "Email or password is incorrect.";
-
   }
-
 
   function test_input($data) {
     $data = trim($data);
@@ -66,16 +62,12 @@
     $data = htmlspecialchars($data);
     return $data;
   }
-    
-  
 ?>
 
 <div id="div-login" style="height: 100vh;"
   class="col-lg-3 col-md-4 col-sm-6 col-8 text-center mx-auto d-flex flex-column justify-content-center">
-  <img src="images/book.png" class="img-fluid mx-auto mb-4 d-block" alt=""
-    style="width: 75px;
-    height: auto;">
-  <h1 class="fw-normal mb-3">Login</h1>
+  <i class="bi bi-book-half" style="font-size: 5rem;"></i>
+  <h1 class="fw-normal mb-3" style="margin-top:-15px;">Login</h1>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
     method="post" class="text-center d-flex flex-column justify-content-center">
     <div class="form-floating mb-1">

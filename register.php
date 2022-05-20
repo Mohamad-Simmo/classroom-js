@@ -18,7 +18,7 @@
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $error = false;
 
-    if (empty($_POST["options-outlined"])) {
+    if (empty(trim($_POST["options-outlined"]))) {
       $optionsErrText = "Please select your occupation.";
     }
     else {
@@ -33,7 +33,7 @@
     }
     
 
-    if (empty($_POST["fname"])) {
+    if (empty(trim($_POST["fname"]))) {
       $fnameErrText = "Enter your first name.";
       $fnameErrClass = "is-invalid";
       $error = true;
@@ -51,7 +51,7 @@
       }
     }
 
-    if (empty($_POST["lname"])) {
+    if (empty(trim($_POST["lname"]))) {
       $lnameErrClass = "is-invalid";
       $lnameErrText = "Enter your last name.";
       $error = true;
@@ -69,7 +69,7 @@
       }
     }
 
-    if (empty($_POST["email"])) {
+    if (empty(trim($_POST["email"]))) {
       $emailErrClass = 'is-invalid';
       $emailErrText = 'Please enter an email address.';
       $error = true;
@@ -135,12 +135,29 @@
       try {
         mysqli_query($conn, $query);
         $id = mysqli_insert_id($conn);
-        mysqli_close($conn);
+        $query = "SELECT * FROM users WHERE id='$id'";
+        try {
+          $result = mysqli_query($conn, $query);
+          mysqli_close($conn);
+        }
+        catch (Exception $e) {
+          echo $e->getMessage();
+        }
+        $row = mysqli_fetch_assoc($result);
+        mysqli_free_result($result);
         session_start();
-        $_SESSION["id"] = $id;
+        $_SESSION["id"] = $row["id"];
+        $_SESSION["email"] = $row["email"];
+        $_SESSION["name"] = $row["fname"]." ".$row["lname"];
+        $_SESSION["type"] = $row["type"];
         $_SESSION["loggedin"] = true;
-        header("location: ./index.php");
-        exit;
+        if ($_SESSION["type"] == 0) {
+          header("location: ./index.php");
+          exit;
+        }
+        else {
+          header("location: ./student.php");
+        }
       }
       catch (Exception $e) {
         //duplicate sql entry code 1062

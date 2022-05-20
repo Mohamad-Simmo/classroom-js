@@ -35,13 +35,21 @@
     }
     else {
       $row = mysqli_fetch_assoc($result);
+      mysqli_free_result($result);
       $hashed_password = $row["password"];
       if (password_verify($password, $hashed_password)) {
         $_SESSION["id"] = $row["id"];
+        $_SESSION["email"] = $row["email"];
+        $_SESSION["name"] = $row["fname"]." ".$row["lname"];
+        $_SESSION["type"] = $row["type"];
         $_SESSION["loggedin"] = true;
-        mysqli_free_result($result);
-        header("location: ./index.php");
-        exit;
+        if ($_SESSION["type"] == 0) {
+          header("location: ./index.php");
+          exit;
+        }
+        else {
+          header("location: ./student.php");
+        }
       }
       else {
         loginError();

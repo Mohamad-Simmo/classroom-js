@@ -6,6 +6,10 @@
       header("location: login.php");
       exit;
     }
+    elseif ($_SESSION["type"] == 1) {
+      header("location: student.php");
+      exit;
+    }
 ?>
 
 <div
@@ -17,7 +21,11 @@
     <span class="fs-4 d-none d-md-inline-block">LIU
       Classroom</span>
   </a>
-  <hr />
+  <div
+    class="col-7 text-warning fw-semibold w-100 text-center text-md-start text-wrap text-truncate">
+    <?php echo $_SESSION["name"]; ?>
+  </div>
+  <hr class="mt-2 mb-3" />
   <ul class="nav nav-pills flex-column mb-auto h-100">
     <li class="nav-item mx-auto mx-md-0">
       <a href="#" class="nav-link text-white active d-flex align-items-center"
@@ -47,9 +55,11 @@
         <i class="bi bi-box-arrow-left me-2 fs-4"></i>
         <span class="d-none d-md-inline-block">Logout</span>
       </a>
+
     </li>
   </ul>
 </div>
+
 <div class="content p-3">
   <div id="classes-container">
     <div class="content-header d-flex gap-3 align-items-center mb-3">
@@ -79,7 +89,7 @@
                 </div>
                 <div class="col-9">
                   <input type="text" id="class-name" class="form-control"
-                    autocomplete="off" />
+                    autocomplete="off" placeholder="Required" />
                 </div>
               </div>
 
@@ -90,7 +100,7 @@
                 </div>
                 <div class="col-9">
                   <input type="text" id="class-description" class="form-control"
-                    autocomplete="off" />
+                    autocomplete="off" placeholder="Optional" />
                 </div>
               </div>
 
@@ -102,7 +112,7 @@
                 <div class="col-9">
                   <textarea name="" cols="30" rows="10" type="text"
                     id="class-students" class="form-control"
-                    placeholder="Comma-sperated emails"
+                    placeholder="Comma-sperated emails (Optional)"
                     autocomplete="off"></textarea>
                 </div>
               </div>

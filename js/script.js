@@ -67,7 +67,7 @@ document.getElementById('confirm-class').addEventListener('click', () => {
         loadClasses();
       }
     };
-    xmlhttp.open('POST', 'addClass.php', true);
+    xmlhttp.open('POST', 'api/addClass.php', true);
     xmlhttp.setRequestHeader(
       'Content-type',
       'application/x-www-form-urlencoded'
@@ -131,7 +131,7 @@ function loadClasses() {
       document.getElementById('classes-page-container').appendChild(wrapper);
     }
   };
-  xmlhttp.open('GET', 'getClasses.php', true);
+  xmlhttp.open('GET', 'api/getClasses.php', true);
   xmlhttp.send();
 }
 
@@ -150,79 +150,122 @@ function loadClass(code, name, description = '') {
   document.getElementById('classes-page-container').appendChild(classContainer);
   classContainer.innerHTML = `
     <nav class="navbar navbar-expand-md bg-warning" style="margin:-2rem -1rem 0 -1rem">
-    <div class="container-fluid">
-      <div class="navbar-brand mb-0 h1 fs-2 fw-normal">
-        ${name}
+      <div class="container-fluid">
+        <div class="navbar-brand mb-0 h1 fs-2 fw-normal">
+          ${name}
+        </div>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <ul class="navbar-nav fs-5">
+            <li class="nav-item">
+              <a id="class-nav-announcements" class="nav-link me-3 active" href="#">Announcements</a>
+            </li>
+            <li class="nav-item">
+              <a id="class-nav-people" class="nav-link me-3" href="#">People</a>
+            </li>
+            <li class="nav-item">
+              <a id="class-nav-info" class="nav-link me-3" href="#">Info</a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-        <ul class="navbar-nav fs-5">
-          <li class="nav-item">
-            <a class="nav-link me-3 active" aria-current="page" href="#">Announcements</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link me-3" href="#">People</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link me-3" href="#">Info</a>
-          </li>
-        </ul>
-      </div>
+    </nav>
+    <div class="p-3" id="class-page-body">
+    
     </div>
-  </nav>
-  <div class="p-3">
-    <form action="#" >
-      <div class="h4" id="class-page-container">Post an announcement</div>
-      <input type="text" class="form-control mb-2" placeholder="Title" id="announcement-title">
-      <textarea class="form-control mb-2" style="height: 75px;" placeholder="Announcement" id="announcement-body"></textarea>
-      <input id="post-announcement" type="submit" class="btn btn-primary" value="Post">
-      <span id="post-error" class="text-danger"></span>
-    </form>
-    <hr>
-    <div class="h4">Announcements</div>
-    <div id="announcements-container"></div>
-  </div>
   `;
+  //default load this page
+  loadClassAnnouncementsPage();
 
-  //TODO: Set on click for post announcement
+  //get class nav links
+  classNavAnnouncements = document.getElementById('class-nav-announcements');
+  classNavPeople = document.getElementById('class-nav-people');
+  classNavInfo = document.getElementById('class-nav-info');
+  //Announcements page
+  document
+    .getElementById('class-nav-announcements')
+    .addEventListener('click', () => {
+      classNavAnnouncements.classList.add('active');
+      classNavPeople.classList.remove('active');
+      classNavInfo.classList.remove('active');
+      loadClassAnnouncementsPage();
+    });
+
+  classNavPeople.addEventListener('click', () => {
+    classNavAnnouncements.classList.remove('active');
+    classNavPeople.classList.add('active');
+    classNavInfo.classList.remove('active');
+    document.getElementById('class-page-body').innerHTML = 'people';
+  });
+
+  //Info page
+  document.getElementById('class-nav-info').addEventListener('click', () => {
+    classNavAnnouncements.classList.remove('active');
+    classNavPeople.classList.remove('active');
+    classNavInfo.classList.add('active');
+    document.getElementById('class-page-body').innerHTML = 'INFO';
+  });
+}
+
+function loadClassAnnouncementsPage() {
+  document.getElementById('class-page-body').innerHTML = `
+        <form action="#" >
+          <div class="h4" id="class-page-container">Post an announcement</div>
+          <input type="text" class="form-control mb-2" placeholder="Title" id="announcement-title">
+          <textarea class="form-control mb-2" style="height: 75px;" placeholder="Announcement" id="announcement-body"></textarea>
+          <input id="post-announcement" type="submit" class="btn btn-primary px-4" value="Post">
+          <span id="post-error" class="text-danger"></span>
+        </form>
+        <hr>
+        <div class="h4">Announcements</div>
+        <div id="announcements-container"></div>
+        `;
   document
     .getElementById('post-announcement')
     .addEventListener('click', (event) => {
-      //prevent page refresh
-      event.preventDefault();
-      let title = document.getElementById('announcement-title');
-      let body = document.getElementById('announcement-body');
-      //TODO: if both are empty invalid
-      if (!title.value && !body.value) {
-        title.classList.add('is-invalid');
-        body.classList.add('is-invalid');
-        document.getElementById('post-error').innerText =
-          'Enter a title or a body.';
-      } else {
-        //send post request
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-          if (this.readyState == 4 && this.status == 200) {
-          }
-        };
-        xmlhttp.open('POST', 'addAnnouncement.php', true);
-        xmlhttp.setRequestHeader(
-          'Content-type',
-          'application/x-www-form-urlencoded'
-        );
-        xmlhttp.send(
-          `announcementTitle=${title.value}&announcementBody=${body.value}`
-        );
-      }
+      postClassAnnouncement(event);
     });
 }
+
+function postClassAnnouncement(event) {
+  //prevent page refresh
+  event.preventDefault();
+  let title = document.getElementById('announcement-title');
+  let body = document.getElementById('announcement-body');
+  //TODO: if both are empty invalid
+  if (!title.value && !body.value) {
+    title.classList.add('is-invalid');
+    body.classList.add('is-invalid');
+    document.getElementById('post-error').innerText =
+      'Enter a title or a body.';
+  } else {
+    //send post request
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+      }
+    };
+    xmlhttp.open('POST', 'api/addAnnouncement.php', true);
+    xmlhttp.setRequestHeader(
+      'Content-type',
+      'application/x-www-form-urlencoded'
+    );
+    xmlhttp.send(
+      `announcementTitle=${title.value}&announcementBody=${body.value}`
+    );
+  }
+}
+
+function loadClassPeoplePage() {}
+
+function loadClassInfoPage() {}

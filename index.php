@@ -29,21 +29,21 @@
   <ul class="nav nav-pills flex-column mb-auto h-100">
     <li class="nav-item mx-auto mx-md-0">
       <a href="#" class="nav-link text-white active d-flex align-items-center"
-        aria-current="page">
+        id="sidebar-btn-classes">
         <i class="bi bi-journal me-md-2 me-0 fs-4"></i>
         <span class="d-none d-md-inline-block">Classes</span>
       </a>
     </li>
     <li class="nav-item mx-auto mx-md-0">
       <a href="#" class="nav-link text-white d-flex align-items-center"
-        aria-current="page">
+        id="sidebar-btn-lorem">
         <i class="bi bi-border-all me-md-2 me-0 fs-4"></i>
         <span class="d-none d-md-inline-block">Lorem</span>
       </a>
     </li>
     <li class="nav-item mx-auto mx-md-0">
       <a href="#" class="nav-link text-white d-flex align-items-center"
-        aria-current="page">
+        id="sidebar-btn-ipsum">
         <i class="bi bi-border-all me-md-2 me-0 fs-4"></i>
         <span class="d-none d-md-inline-block">Ipsum</span>
       </a>
@@ -61,85 +61,83 @@
 </div>
 
 <div class="content p-3">
-  <div id="classes-container">
+
+
+  <div id="classes-page-container">
+
     <div class="content-header d-flex gap-3 align-items-center mb-3">
       <h1 id="content-title" class="d-inline">Classes</h1>
-
       <button type="button" class="btn btn-link p-0" id="new-class-btn"
         data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i
           class="bi bi-plus-circle fs-2" data-bs-toggle="tooltip"
           title="New Class" data-bs-custom-class="custom-tooltip"></i></button>
+    </div>
 
-
-      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
-        data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="staticBackdropLabel">New Class</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"
-                aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="row g-2 align-items-center mb-3">
-                <div class="col-3">
-                  <label for="class-name" class="col-form-label">Class
-                    Name</label>
-                </div>
-                <div class="col-9">
-                  <input type="text" id="class-name" class="form-control"
-                    autocomplete="off" placeholder="Required" />
-                </div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+      data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">New Class</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-2 align-items-center mb-3">
+              <div class="col-3">
+                <label for="class-name" class="col-form-label">Class
+                  Name</label>
               </div>
-
-              <div class="row g-2 align-items-center mb-3">
-                <div class="col-3">
-                  <label for="class-description"
-                    class="col-form-label">Description</label>
-                </div>
-                <div class="col-9">
-                  <input type="text" id="class-description" class="form-control"
-                    autocomplete="off" placeholder="Optional" />
-                </div>
-              </div>
-
-              <div class="row g-2 align-items-center">
-                <div class="col-3">
-                  <label for="class-students" class="col-form-label">Add
-                    Students</label>
-                </div>
-                <div class="col-9">
-                  <textarea name="" cols="30" rows="10" type="text"
-                    id="class-students" class="form-control"
-                    placeholder="Comma-sperated emails (Optional)"
-                    autocomplete="off"></textarea>
-                </div>
+              <div class="col-9">
+                <input type="text" id="class-name" class="form-control"
+                  autocomplete="off" placeholder="Required" />
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary"
-                data-bs-dismiss="modal">
-                Cancel
-              </button>
-              <button type="button" class="btn btn-primary" id="confirm-class">
-                Confirm
-              </button>
+
+            <div class="row g-2 align-items-center mb-3">
+              <div class="col-3">
+                <label for="class-description"
+                  class="col-form-label">Description</label>
+              </div>
+              <div class="col-9">
+                <input type="text" id="class-description" class="form-control"
+                  autocomplete="off" placeholder="Optional" />
+              </div>
             </div>
+
+            <div class="row g-2 align-items-center">
+              <div class="col-3">
+                <label for="class-students" class="col-form-label">Add
+                  Students</label>
+              </div>
+              <div class="col-9">
+                <textarea name="" cols="30" rows="10" type="text"
+                  id="class-students" class="form-control"
+                  placeholder="Comma-sperated emails (Optional)"
+                  autocomplete="off"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary"
+              data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary" id="confirm-class">
+              Confirm
+            </button>
           </div>
         </div>
       </div>
-
-
-
     </div>
-    <div class="container-fluid">
 
-    </div>
-    <div id="new-class-form">
+    <div id="liveAlertPlaceholder"></div>
 
-    </div>
   </div>
+
+  <div id="lorem-container"></div>
+  <div id="ipsum-container"></div>
 
 </div>
 

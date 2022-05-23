@@ -49,6 +49,7 @@
         }
         else {
           header("location: ./student.php");
+          exit;
         }
       }
       else {

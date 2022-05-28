@@ -14,13 +14,9 @@
   if (!empty(trim($classStudents))){
     $classStudentsArr = explode(",", $classStudents);
   }
-  
-  if (empty($classDescription)) {
-    $query = "INSERT INTO classes VALUES(DEFAULT, '$userId','$className', NULL, '$classCode')";
-  }
-  else {
-    $query = "INSERT INTO classes VALUES(DEFAULT, '$userId','$className', '$classDescription', '$classCode')";
-  }
+    
+  $query = "INSERT INTO classes VALUES(DEFAULT, '$userId','$className', '$classDescription', '$classCode')";
+
   
   try {
     //Create class and teacher to class

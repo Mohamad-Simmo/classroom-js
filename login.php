@@ -43,14 +43,8 @@
         $_SESSION["name"] = $row["fname"]." ".$row["lname"];
         $_SESSION["type"] = $row["type"];
         $_SESSION["loggedin"] = true;
-        if ($_SESSION["type"] == 0) {
-          header("location: ./index.php");
+        header("location: ./index.php");
           exit;
-        }
-        else {
-          header("location: ./student.php");
-          exit;
-        }
       }
       else {
         loginError();
@@ -107,6 +101,10 @@
   <p class="text-muted me-3">© Mohammad Semmo</p>
 </div>
 
-<?php
-    include('partials/footer.php');
-?>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+  crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -3,13 +3,21 @@
   session_start();
   $userId = $_SESSION["id"];
 
-  //return classes
-  $query = "SELECT classes.id, classes.name, classes.description, classes.code,
-                   COUNT(users_classes.class_id) as num_people
-            FROM classes, users_classes
-            WHERE classes.user_id = '$userId' 
-              AND classes.id = users_classes.class_id
-            GROUP BY classes.id DESC";
+  //get classes created by user or user is in class and number of people in class
+  $query = "SELECT users.fname, users.lname, classes.name, 
+                    classes.description, classes.code, COUNT(*) as num_people
+            FROM classes
+            JOIN users_classes ON users_classes.class_id = classes.id 
+            AND (
+              classes.user_id = '$userId'
+              OR users_classes.class_id IN (
+                SELECT users_classes.class_id 
+                FROM users_classes 
+                WHERE users_classes.user_id = '$userId'
+              )
+            ) 
+            JOIN users ON users.id = classes.user_id
+            GROUP BY classes.name ASC";
 
   $result = mysqli_query($conn, $query);
   $response = [];

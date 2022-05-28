@@ -131,6 +131,8 @@
     }
 
     if (!$error) {
+      $fname = ucwords(strtolower($fname));
+      $lname = ucwords(strtolower($lname));
       $query = "INSERT INTO users VALUES ('DEFAULT','$fname', '$lname', '$email', '$password', '$type')";
       try {
         mysqli_query($conn, $query);

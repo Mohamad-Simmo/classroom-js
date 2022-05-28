@@ -6,10 +6,7 @@
       header("location: login.php");
       exit;
     }
-    elseif ($_SESSION["type"] == 1) {
-      header("location: student.php");
-      exit;
-    }
+    
 ?>
 
 <div
@@ -70,7 +67,8 @@
       <button type="button" class="btn btn-link p-0" id="new-class-btn"
         data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i
           class="bi bi-plus-circle fs-2" data-bs-toggle="tooltip"
-          title="New Class" data-bs-custom-class="custom-tooltip"></i></button>
+          title="<?php echo $_SESSION["type"]==0 ? "New Class": "Join Class" ?>"
+          data-bs-custom-class="custom-tooltip"></i></button>
     </div>
 
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
@@ -79,54 +77,23 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">New Class</h5>
+            <h5 class="modal-title" id="staticBackdropLabel">
+              <?php $_SESSION["type"]==0 ? "New Class": "Join Class" ?>
+            </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"
               aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <div class="row g-2 align-items-center mb-3">
-              <div class="col-3">
-                <label for="class-name" class="col-form-label">Class
-                  Name</label>
-              </div>
-              <div class="col-9">
-                <input type="text" id="class-name" class="form-control"
-                  autocomplete="off" placeholder="Required" />
-              </div>
-            </div>
+          <div class="modal-body" id="modal-body">
 
-            <div class="row g-2 align-items-center mb-3">
-              <div class="col-3">
-                <label for="class-description"
-                  class="col-form-label">Description</label>
-              </div>
-              <div class="col-9">
-                <input type="text" id="class-description" class="form-control"
-                  autocomplete="off" placeholder="Optional" />
-              </div>
-            </div>
-
-            <div class="row g-2 align-items-center">
-              <div class="col-3">
-                <label for="class-students" class="col-form-label">Add
-                  Students</label>
-              </div>
-              <div class="col-9">
-                <textarea name="" cols="30" rows="10" type="text"
-                  id="class-students" class="form-control"
-                  placeholder="Comma-sperated emails (Optional)"
-                  autocomplete="off"></textarea>
-              </div>
-            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary"
               data-bs-dismiss="modal">
               Cancel
             </button>
-            <button type="submit" class="btn btn-primary" id="confirm-class">
-              Confirm
-            </button>
+            <button type="submit" class="btn btn-primary"
+              id="<?php echo $_SESSION["type"]==0 ? "confirm-class": "join-class" ?>">
+              Confirm </button>
           </div>
         </div>
       </div>

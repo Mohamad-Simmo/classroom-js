@@ -6,80 +6,6 @@ const tooltipList = [...tooltipTriggerList].map(
   (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
 );
 
-//Bind modal elements
-let className = document.getElementById('class-name');
-let classDescription = document.getElementById('class-description');
-let classStudents = document.getElementById('class-students');
-let modalEl = document.getElementById('staticBackdrop');
-
-//If modal is dismissed clear input fields
-modalEl.addEventListener('hide.bs.modal', () => {
-  className.classList.remove('is-invalid');
-  className.value = '';
-  classDescription.value = '';
-  classStudents.value = '';
-});
-
-//Create new class
-document.getElementById('confirm-class').addEventListener('click', () => {
-  let modal = bootstrap.Modal.getInstance(modalEl);
-
-  if (!className.value.trim()) {
-    className.classList.add('is-invalid');
-  } else {
-    //Remove white space
-    classStudentsVal = classStudents.value;
-    classStudentsVal = classStudentsVal.trim();
-    classStudentsVal = classStudentsVal.replaceAll(' ', '');
-    classStudentsVal = classStudentsVal.replaceAll('\n', '');
-
-    //Create request
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        //TODO: show response
-        const response = JSON.parse(this.responseText);
-
-        //Create alert
-        const wrapper = document.createElement('div');
-        alertElement = [
-          '<div class="alert alert-secondary alert-dismissible" role="alert">',
-          `   <div>${response.message}</div>`,
-        ];
-        if (response.emails) {
-          for (let i = 0; i < response.emails.length; i++) {
-            alertElement.push(
-              `<div ${
-                response.emails[i].added
-                  ? 'class="text-success"> Added'
-                  : 'class="text-danger"> Failed to add'
-              }: ${response.emails[i].email}</div>`
-            );
-          }
-        }
-        alertElement.push(
-          '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">',
-          '</button>',
-          '</div>'
-        );
-        wrapper.innerHTML = alertElement.join('');
-        document.getElementById('liveAlertPlaceholder').append(wrapper);
-        loadClasses();
-      }
-    };
-    xmlhttp.open('POST', 'api/addClass.php', true);
-    xmlhttp.setRequestHeader(
-      'Content-type',
-      'application/x-www-form-urlencoded'
-    );
-    xmlhttp.send(
-      `className=${className.value}&classDescription=${classDescription.value}&classStudents=${classStudentsVal}`
-    );
-    //confirm clicked --> close modal
-    modal.hide();
-  }
-});
-
 function loadClasses() {
   //remove old container
   if ((el = document.getElementById('classes-container'))) {
@@ -97,7 +23,6 @@ function loadClasses() {
       wrapper.id = 'classes-container';
       wrapper.classList.add('row', 'g-3');
       for (let row in response) {
-        console.log(response[row]);
         const div = document.createElement('div');
         div.classList.add('col-12', 'col-md-6', 'col-lg-4');
         const card = document.createElement('div');
@@ -107,6 +32,9 @@ function loadClasses() {
           ` <li class="list-group-item">${response[row].name}</li>`,
           ` <li class="list-group-item">${
             response[row].description ? response[row].description : '-'
+          }</li>`,
+          ` <li class="list-group-item">${
+            response[row].fname + ' ' + response[row].lname
           }</li>`,
           ` <li class="list-group-item">People: ${response[row].num_people}</li>`,
           '</ul>',
@@ -139,6 +67,8 @@ function loadClass(code, name, description = '') {
   //hide classes header
   document.getElementById('new-class-btn').classList.add('d-none');
   document.getElementById('content-title').classList.add('d-none');
+  //if there is an alert remove it
+  document.getElementById('liveAlertPlaceholder').innerHTML = '';
   //remove classes element
   if ((el = document.getElementById('classes-container'))) {
     el.remove();
@@ -185,7 +115,7 @@ function loadClass(code, name, description = '') {
     </div>
   `;
   //default load this page
-  loadClassAnnouncementsPage();
+  loadClassAnnouncementsPage(code);
 
   //get class nav links
   classNavAnnouncements = document.getElementById('class-nav-announcements');
@@ -198,14 +128,14 @@ function loadClass(code, name, description = '') {
       classNavAnnouncements.classList.add('active');
       classNavPeople.classList.remove('active');
       classNavInfo.classList.remove('active');
-      loadClassAnnouncementsPage();
+      loadClassAnnouncementsPage(code);
     });
 
   classNavPeople.addEventListener('click', () => {
     classNavAnnouncements.classList.remove('active');
     classNavPeople.classList.add('active');
     classNavInfo.classList.remove('active');
-    document.getElementById('class-page-body').innerHTML = 'people';
+    loadClassPeoplePage(code);
   });
 
   //Info page
@@ -213,11 +143,11 @@ function loadClass(code, name, description = '') {
     classNavAnnouncements.classList.remove('active');
     classNavPeople.classList.remove('active');
     classNavInfo.classList.add('active');
-    document.getElementById('class-page-body').innerHTML = 'INFO';
+    loadClassInfoPage(code);
   });
 }
 
-function loadClassAnnouncementsPage() {
+function loadClassAnnouncementsPage(code) {
   document.getElementById('class-page-body').innerHTML = `
         <form action="#" >
           <div class="h4" id="class-page-container">Post an announcement</div>
@@ -227,32 +157,72 @@ function loadClassAnnouncementsPage() {
           <span id="post-error" class="text-danger"></span>
         </form>
         <hr>
-        <div class="h4">Announcements</div>
+        <div class="h4 mb-3">Announcements</div>
         <div id="announcements-container"></div>
         `;
   document
     .getElementById('post-announcement')
     .addEventListener('click', (event) => {
-      postClassAnnouncement(event);
+      postClassAnnouncement(event, code);
     });
+
+  loadAnnouncements(code);
 }
 
-function postClassAnnouncement(event) {
+function loadAnnouncements(code) {
+  const wrapper = document.getElementById('announcements-container');
+  wrapper.innerHTML = '';
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
+      let response = JSON.parse(this.responseText);
+      console.log(response);
+      for (let row in response) {
+        const div = document.createElement('div');
+        div.classList.add('mb-3', 'p-2', 'border', 'rounded', 'bg-white');
+        div.innerHTML = `
+          <div class="d-flex justify-content-between">
+            <div class="h6 text-muted">${response[row].fname} ${
+          response[row].lname
+        }</div>
+            <div>${response[row].timestamp}</div>
+          </div>
+          <div class="h5">${
+            response[row].title ? response[row].title : 'No title'
+          }</div>
+          <div>${response[row].body}</div>
+        `;
+        wrapper.appendChild(div);
+      }
+    }
+  };
+  xmlhttp.open('GET', 'api/getAnnouncements.php?code=' + code, true);
+  xmlhttp.send();
+}
+
+function postClassAnnouncement(event, code) {
   //prevent page refresh
   event.preventDefault();
   let title = document.getElementById('announcement-title');
   let body = document.getElementById('announcement-body');
+  let err = document.getElementById('post-error');
   //TODO: if both are empty invalid
   if (!title.value && !body.value) {
     title.classList.add('is-invalid');
     body.classList.add('is-invalid');
-    document.getElementById('post-error').innerText =
-      'Enter a title or a body.';
+    err.innerText = 'Enter a title or a body.';
   } else {
     //send post request
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
+        title.value = '';
+        body.value = '';
+        err.value = '';
+        title.classList.remove('is-invalid');
+        body.classList.remove('is-invalid');
+        loadAnnouncements(code);
       }
     };
     xmlhttp.open('POST', 'api/addAnnouncement.php', true);
@@ -261,11 +231,81 @@ function postClassAnnouncement(event) {
       'application/x-www-form-urlencoded'
     );
     xmlhttp.send(
-      `announcementTitle=${title.value}&announcementBody=${body.value}`
+      `classCode=${code}&announcementTitle=${title.value}&announcementBody=${body.value}`
     );
   }
 }
 
-function loadClassPeoplePage() {}
+function loadClassPeoplePage(code) {
+  document.getElementById('class-page-body').innerHTML = `
+    <div class="h4 mb-3">People</div>
+  `;
+  const table = document.createElement('table');
+  table.classList.add('table');
+  table.innerHTML = `
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Occupation</th>
+    <th scope="col">First</th>
+    <th scope="col">Last</th>
+    <th scope="col">Email</th>
+  </tr>
+  </thead>
+  `;
 
-function loadClassInfoPage() {}
+  const tbody = document.createElement('tbody');
+  table.appendChild(tbody);
+
+  let xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      let response = JSON.parse(this.responseText);
+
+      for (let row in response) {
+        tbody.innerHTML += `
+        <tr>
+          <th scope="row">${row}</th>
+          <td>${response[row].type == 1 ? 'Student' : 'Teacher'}</td>
+          <td>${response[row].fname}</td>
+          <td>${response[row].lname}</td>
+          <td>${response[row].email}</td>
+        </tr>
+        `;
+      }
+      document.getElementById('class-page-body').appendChild(table);
+    }
+  };
+  xmlhttp.open('GET', 'api/getPeople.php?code=' + code, true);
+  xmlhttp.send();
+}
+
+function loadClassInfoPage(code) {
+  document.getElementById('class-page-body').innerHTML = '';
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('mt-5');
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
+      let response = JSON.parse(this.responseText);
+      for (let key in response) {
+        wrapper.innerHTML += `
+              <div class="row justify-content-md-center mb-2 fs-6">
+                <div class="col-md-3 col-auto">
+                  <strong>${key.replace(/\b\w/g, (l) =>
+                    l.toUpperCase()
+                  )}</strong>
+                </div>
+                <div class="col-md-3 col-auto">
+                  ${response[key]}
+                </div>
+              </div>
+          `;
+      }
+      document.getElementById('class-page-body').appendChild(wrapper);
+    }
+  };
+  xmlhttp.open('GET', 'api/getClassInfo.php?code=' + code, true);
+  xmlhttp.send();
+}

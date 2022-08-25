@@ -58,7 +58,7 @@ document.getElementById('confirm-class').addEventListener('click', () => {
     className.classList.add('is-invalid');
   } else {
     //Remove white space
-    classStudentsVal = classStudents.value;
+    let classStudentsVal = classStudents.value;
     classStudentsVal = classStudentsVal.trim();
     classStudentsVal = classStudentsVal.replaceAll(' ', '');
     classStudentsVal = classStudentsVal.replaceAll('\n', '');
@@ -69,6 +69,7 @@ document.getElementById('confirm-class').addEventListener('click', () => {
       if (this.readyState == 4 && this.status == 200) {
         //TODO: show response
         const response = JSON.parse(this.responseText);
+        console.log(response);
 
         //Create alert
         const wrapper = document.createElement('div');
@@ -109,3 +110,47 @@ document.getElementById('confirm-class').addEventListener('click', () => {
     modal.hide();
   }
 });
+
+function addPeopleForm(code) {
+  const form = document.createElement('div');
+
+  form.innerHTML = `
+    <div class="h4" id="class-page-container">Add people</div>
+    <textarea 
+      class="form-control mb-2" 
+      style="height: 75px;"
+      placeholder="Comma-separated Emails" 
+      id="peopleEmails"></textarea>
+    <input id="submitPeopleEmails" type="submit" class="btn btn-primary px-4" value="Confirm">
+    <span id="" class="text-danger"></span>
+  `;
+  document
+    .getElementById('class-page-body')
+    .prepend(document.createElement('hr'));
+  document.getElementById('class-page-body').prepend(form);
+
+  document
+    .getElementById('submitPeopleEmails')
+    .addEventListener('click', (event) => {
+      event.preventDefault();
+      const peopleEmails = document.getElementById('peopleEmails');
+      let peopleEmailsVal = peopleEmails.value;
+      peopleEmailsVal = peopleEmailsVal.trim();
+      peopleEmailsVal = peopleEmailsVal.replaceAll(' ', '');
+      peopleEmailsVal = peopleEmailsVal.replaceAll('\n', '');
+
+      let xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText);
+          loadClassPeoplePage(code);
+        }
+      };
+      xmlhttp.open('POST', 'api/addPeople.php', true);
+      xmlhttp.setRequestHeader(
+        'Content-type',
+        'application/x-www-form-urlencoded'
+      );
+      xmlhttp.send(`code=${code}&people=${peopleEmailsVal}`);
+    });
+}

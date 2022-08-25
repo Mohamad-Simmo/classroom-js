@@ -11,9 +11,11 @@ function loadClasses() {
   if ((el = document.getElementById('classes-container'))) {
     el.remove();
   }
+  //bootstrap alert
   if ((el = document.getElementById('class-container'))) {
     el.remove();
   }
+
   document.getElementById('content-title').innerText = 'Classes';
   let xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function () {
@@ -175,9 +177,7 @@ function loadAnnouncements(code) {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      console.log(this.responseText);
       let response = JSON.parse(this.responseText);
-      console.log(response);
       for (let row in response) {
         const div = document.createElement('div');
         div.classList.add('mb-3', 'p-2', 'border', 'rounded', 'bg-white');
@@ -219,7 +219,7 @@ function postClassAnnouncement(event, code) {
       if (this.readyState == 4 && this.status == 200) {
         title.value = '';
         body.value = '';
-        err.value = '';
+        err.innerText = '';
         title.classList.remove('is-invalid');
         body.classList.remove('is-invalid');
         loadAnnouncements(code);
@@ -278,16 +278,19 @@ function loadClassPeoplePage(code) {
   };
   xmlhttp.open('GET', 'api/getPeople.php?code=' + code, true);
   xmlhttp.send();
+  //if teacher display add people form
+  if (type == 0) {
+    addPeopleForm(code);
+  }
 }
 
 function loadClassInfoPage(code) {
   document.getElementById('class-page-body').innerHTML = '';
   const wrapper = document.createElement('div');
-  wrapper.classList.add('mt-5');
+  wrapper.classList.add('mt-md-5');
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      console.log(this.responseText);
       let response = JSON.parse(this.responseText);
       for (let key in response) {
         wrapper.innerHTML += `
@@ -298,7 +301,7 @@ function loadClassInfoPage(code) {
                   )}</strong>
                 </div>
                 <div class="col-md-3 col-auto">
-                  ${response[key]}
+                  ${response[key] ? response[key] : '-'}
                 </div>
               </div>
           `;

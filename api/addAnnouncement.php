@@ -2,11 +2,28 @@
   require '../partials/connection.php';
   session_start();
 
-  //TODO: error checking
+  if(!(isset($_SESSION["loggedin"])) || $_SESSION["loggedin"] === false){
+    die(http_response_code(401));
+  }
+
+  function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+  }
+
+
   $userId = $_SESSION["id"];
-  $announcementTitle = trim($_POST["announcementTitle"]);
-  $announcementBody = trim($_POST["announcementBody"]);
-  $classCode = $_POST["classCode"];
+  $announcementTitle = test_input($_POST["announcementTitle"]);
+  $announcementBody = test_input($_POST["announcementBody"]);
+  $classCode = test_input($_POST["classCode"]);
+
+
+
+  if(empty($classCode) || (empty($announcementTitle) && empty($announcementBody))) {
+    die(http_response_code(400));
+  }
 
   $query = "INSERT INTO announcements
             VALUES(
@@ -15,10 +32,9 @@
               (SELECT id FROM classes WHERE code='$classCode'),
               '$announcementTitle',
               '$announcementBody',
-              DEFAULT)";
+              DEFAULT
+            )";
 
-   echo mysqli_query($conn, $query);
+  mysqli_query($conn, $query) or die("Connection error");
 
-  
-  
 ?>

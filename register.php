@@ -133,7 +133,7 @@
     if (!$error) {
       $fname = ucwords(strtolower($fname));
       $lname = ucwords(strtolower($lname));
-      $query = "INSERT INTO users VALUES ('DEFAULT','$fname', '$lname', '$email', '$password', '$type')";
+      $query = "INSERT INTO users VALUES (DEFAULT,'$fname', '$lname', '$email', '$password', '$type')";
       try {
         mysqli_query($conn, $query);
         $id = mysqli_insert_id($conn);
@@ -153,13 +153,8 @@
         $_SESSION["name"] = $row["fname"]." ".$row["lname"];
         $_SESSION["type"] = $row["type"];
         $_SESSION["loggedin"] = true;
-        if ($_SESSION["type"] == 0) {
-          header("location: ./index.php");
-          exit;
-        }
-        else {
-          header("location: ./student.php");
-        }
+        header("location: ./index.php");
+        exit;
       }
       catch (Exception $e) {
         //duplicate sql entry code 1062
@@ -184,97 +179,107 @@
 ?>
 
 <div id="div-register vh-100"
-  class="col-lg-3 col-md-4 col-sm-6 col-8 text-center mx-auto d-flex flex-column justify-content-center">
-  <i class="bi bi-book-half mb-1" style="font-size: 5rem;"></i>
-  <h1 class="fw-normal mb-4 mb-sm-2" style="margin-top:-15px;">Register</h1>
+    class="col-lg-3 col-md-4 col-sm-6 col-8 text-center mx-auto d-flex flex-column justify-content-center">
+    <i class="bi bi-book-half mb-1" style="font-size: 5rem;"></i>
+    <h1 class="fw-normal mb-4 mb-sm-2" style="margin-top:-15px;">Register</h1>
 
-  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
-    method="post" class="text-center d-flex flex-column justify-content-center">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
+        method="post"
+        class="text-center d-flex flex-column justify-content-center">
 
-    <div
-      class="d-flex justify-content-center align-items-center mb-1 gap-2 gap-sm-3">
-      <input type="radio" class="btn-check" name="options-outlined"
-        id="student-outlined" autocomplete="off" value="student"
-        <?php echo ($student ? ' checked':'');?>>
-      <label class="btn btn-lg btn-outline-success"
-        for="student-outlined">Student</label>
-      <div>Or</div>
-      <input type="radio" class="btn-check" name="options-outlined"
-        id="teacher-outlined" value="teacher" autocomplete="off"
-        required<?php echo ($teacher ? ' checked':'');?>>
-      <label class="btn btn-lg btn-outline-success"
-        for="teacher-outlined">Teacher</label>
-    </div>
-
-    <div class="options-error text-danger">
-      <?php echo $optionsErrText; ?>
-    </div>
-    <div class="row g-0">
-
-      <div class="form-floating col-6 mb-1">
-        <input type="text" class="form-control <?php echo $fnameErrClass;?>"
-          id="inputFname" placeholder="First name" name="fname"
-          value="<?php echo $fnameVal;?>" autocomplete="first-name">
-        <label for="inputFname">First name</label>
-        <div class="invalid-feedback text-start ms-2 mt-0">
-          <?php echo $fnameErrText; ?>
+        <div
+            class="d-flex justify-content-center align-items-center mb-1 gap-2 gap-sm-3">
+            <input type="radio" class="btn-check" name="options-outlined"
+                id="student-outlined" autocomplete="off" value="student"
+                <?php echo ($student ? ' checked':'');?>>
+            <label class="btn btn-lg btn-outline-success"
+                for="student-outlined">Student</label>
+            <div>Or</div>
+            <input type="radio" class="btn-check" name="options-outlined"
+                id="teacher-outlined" value="teacher" autocomplete="off"
+                required<?php echo ($teacher ? ' checked':'');?>>
+            <label class="btn btn-lg btn-outline-success"
+                for="teacher-outlined">Teacher</label>
         </div>
-      </div>
 
-      <div class="form-floating col-6 mb-1">
-        <input type="text" class="form-control <?php echo $lnameErrClass; ?>"
-          id="inputLname" placeholder="Last name" name="lname"
-          value="<?php echo $lnameVal; ?>" autocomplete="last-name">
-        <label for="inputLname">Last name</label>
-        <div class="invalid-feedback text-start ms-2 mt-0">
-          <?php echo $lnameErrText; ?>
+        <div class="options-error text-danger">
+            <?php echo $optionsErrText; ?>
         </div>
-      </div>
+        <div class="row g-0">
 
-    </div>
+            <div class="form-floating col-6 mb-1">
+                <input type="text"
+                    class="form-control <?php echo $fnameErrClass;?>"
+                    id="inputFname" placeholder="First name" name="fname"
+                    value="<?php echo $fnameVal;?>" autocomplete="first-name">
+                <label for="inputFname">First name</label>
+                <div class="invalid-feedback text-start ms-2 mt-0">
+                    <?php echo $fnameErrText; ?>
+                </div>
+            </div>
 
-    <div class="form-floating mb-1">
-      <input type="email" class="form-control <?php echo $emailErrClass;?>"
-        id="inputEmail" placeholder="Email" name="email"
-        value="<?php echo $emailAddrVal;?>" autocomplete="new-email">
-      <label for="inputEmail">Email address</label>
-      <div class="invalid-feedback text-start ms-2 mt-0">
-        <?php echo $emailErrText; ?>
-      </div>
-    </div>
+            <div class="form-floating col-6 mb-1">
+                <input type="text"
+                    class="form-control <?php echo $lnameErrClass; ?>"
+                    id="inputLname" placeholder="Last name" name="lname"
+                    value="<?php echo $lnameVal; ?>" autocomplete="last-name">
+                <label for="inputLname">Last name</label>
+                <div class="invalid-feedback text-start ms-2 mt-0">
+                    <?php echo $lnameErrText; ?>
+                </div>
+            </div>
 
-    <div class="form-floating mb-1">
-      <input type="password" class="form-control <?php echo $passErrClass; ?>"
-        id="inputPassword" placeholder="Password" name="password"
-        value="<?php echo $passVal; ?>" autocomplete="new-password">
-      <label for="inputPassword">Password</label>
-      <div class="invalid-feedback text-start ms-2 mt-0">
-        <?php echo $passErrText; ?>
-      </div>
-    </div>
+        </div>
+
+        <div class="form-floating mb-1">
+            <input type="email"
+                class="form-control <?php echo $emailErrClass;?>"
+                id="inputEmail" placeholder="Email" name="email"
+                value="<?php echo $emailAddrVal;?>" autocomplete="new-email">
+            <label for="inputEmail">Email address</label>
+            <div class="invalid-feedback text-start ms-2 mt-0">
+                <?php echo $emailErrText; ?>
+            </div>
+        </div>
+
+        <div class="form-floating mb-1">
+            <input type="password"
+                class="form-control <?php echo $passErrClass; ?>"
+                id="inputPassword" placeholder="Password" name="password"
+                value="<?php echo $passVal; ?>" autocomplete="new-password">
+            <label for="inputPassword">Password</label>
+            <div class="invalid-feedback text-start ms-2 mt-0">
+                <?php echo $passErrText; ?>
+            </div>
+        </div>
 
 
-    <div class="form-floating mb-1">
-      <input type="password"
-        class="form-control <?php echo $passConfErrClass; ?>"
-        id="inputConfPassword" placeholder="Password" name="confpassword"
-        value="<?php echo $passConfVal; ?>" autocomplete="new-password">
-      <label for="inputPassword">Confirm Password</label>
-      <div class="invalid-feedback text-start ms-2 mt-0">
-        <?php echo $passConfErrText; ?>
-      </div>
-    </div>
+        <div class="form-floating mb-1">
+            <input type="password"
+                class="form-control <?php echo $passConfErrClass; ?>"
+                id="inputConfPassword" placeholder="Password"
+                name="confpassword" value="<?php echo $passConfVal; ?>"
+                autocomplete="new-password">
+            <label for="inputPassword">Confirm Password</label>
+            <div class="invalid-feedback text-start ms-2 mt-0">
+                <?php echo $passConfErrText; ?>
+            </div>
+        </div>
 
-    <button type="submit" class="btn btn-primary btn-lg">Register</button>
-  </form>
+        <button type="submit" class="btn btn-primary btn-lg">Register</button>
+    </form>
 
-  <p class="mt-3 mb-3">Already a member? <a href="login.php">Login</a>
-  </p>
+    <p class="mt-3 mb-3">Already a member? <a href="login.php">Login</a>
+    </p>
 </div>
 
 
 
 
-<?php
-  include('partials/footer.php');
-?>
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

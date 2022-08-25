@@ -17,14 +17,13 @@
               )
             ) 
             JOIN users ON users.id = classes.user_id
-            GROUP BY classes.name ASC";
+            GROUP BY classes.code ASC";
 
   $result = mysqli_query($conn, $query);
   $response = [];
   while ($row = mysqli_fetch_assoc($result)) {
     $response[] = $row;
   }
-  -
   mysqli_free_result($result);
   mysqli_close($conn);
   echo json_encode($response);

@@ -2,6 +2,7 @@
   require "../partials/connection.php";
   session_start();
 
+  
   $userId = $_SESSION["id"];
   $className = test_input($_POST["className"]);
   $classDescription = test_input($_POST["classDescription"]);

@@ -102,13 +102,8 @@
 
     </div>
 
-<<<<<<< HEAD
-    <div id="lorem-container">Assignment</div>
-    <div id="ipsum-container"></div>
-=======
     <div id="Assignments-container"></div>
     <div id="Tests-container"></div>
->>>>>>> d978f3842071ad5f1b5ce9071573f0af426926b3
 
 </div>
 

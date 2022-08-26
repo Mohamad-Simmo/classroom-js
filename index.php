@@ -32,16 +32,16 @@
         </li>
         <li class="nav-item mx-auto mx-md-0">
             <a href="#" class="nav-link text-white d-flex align-items-center"
-                id="sidebar-btn-lorem">
+                id="sidebar-btn-Assignments">
                 <i class="bi bi-border-all me-md-2 me-0 fs-4"></i>
-                <span class="d-none d-md-inline-block">Lorem</span>
+                <span class="d-none d-md-inline-block">Assignments</span>
             </a>
         </li>
         <li class="nav-item mx-auto mx-md-0">
             <a href="#" class="nav-link text-white d-flex align-items-center"
-                id="sidebar-btn-ipsum">
+                id="sidebar-btn-Tests">
                 <i class="bi bi-border-all me-md-2 me-0 fs-4"></i>
-                <span class="d-none d-md-inline-block">Ipsum</span>
+                <span class="d-none d-md-inline-block">Tests</span>
             </a>
         </li>
 
@@ -102,8 +102,8 @@
 
     </div>
 
-    <div id="lorem-container"></div>
-    <div id="ipsum-container"></div>
+    <div id="Assignments-container"></div>
+    <div id="Tests-container"></div>
 
 </div>
 

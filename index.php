@@ -102,8 +102,27 @@
 
     </div>
 
-    <div id="Assignments-container"></div>
-    <div id="Tests-container"></div>
+    <div id="assignments-page-container">
+        <h1 id="content-title">Assignments</h1>
+        <?php
+            echo $_SESSION["type"] == 0 ?
+                '<a href="create_form.php?form=assignment">
+                    <button class="btn btn-primary">Create New Assignment</button>
+                </a>':
+                'TODO DISPLAY ASSIGNMENTS';
+        ?>
+    </div>
+    
+    <div id="tests-page-container">
+        <h1 id="content-title">Tests</h1>
+        <?php
+            echo $_SESSION["type"] == 0 ?
+                '<a href="create_form.php?form=test">
+                    <button class="btn btn-primary">Create New Test</button>
+                </a>':
+                'TODO DISPLAY TESTS';
+        ?>
+    </div>
 
 </div>
 

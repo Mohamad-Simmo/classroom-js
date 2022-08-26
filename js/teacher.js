@@ -37,10 +37,10 @@ document.getElementById('modal-body').innerHTML = `
   `;
 
 //Bind modal elements
-let className = document.getElementById('class-name');
-let classDescription = document.getElementById('class-description');
-let classStudents = document.getElementById('class-students');
-let modalEl = document.getElementById('staticBackdrop');
+const className = document.getElementById('class-name');
+const classDescription = document.getElementById('class-description');
+const classStudents = document.getElementById('class-students');
+const modalEl = document.getElementById('staticBackdrop');
 
 //If modal is dismissed clear input fields
 modalEl.addEventListener('hide.bs.modal', () => {
@@ -52,7 +52,7 @@ modalEl.addEventListener('hide.bs.modal', () => {
 
 //Create new class
 document.getElementById('confirm-class').addEventListener('click', () => {
-  let modal = bootstrap.Modal.getInstance(modalEl);
+  const modal = bootstrap.Modal.getInstance(modalEl);
 
   if (!className.value.trim()) {
     className.classList.add('is-invalid');

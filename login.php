@@ -68,43 +68,47 @@
 ?>
 
 <div id="div-login" style="height: 100vh;"
-  class="col-lg-3 col-md-4 col-sm-6 col-8 text-center mx-auto d-flex flex-column justify-content-center">
-  <i class="bi bi-book-half" style="font-size: 5rem;"></i>
-  <h1 class="fw-normal mb-3" style="margin-top:-15px;">Login</h1>
-  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
-    method="post" class="text-center d-flex flex-column justify-content-center">
-    <div class="form-floating mb-1">
-      <input type="email" class="form-control <?php echo $emailErrClass; ?>"
-        id="inputEmail" placeholder="Email" autocomplete="email" name="email">
-      <label for="inputEmail">Email address</label>
-    </div>
+    class="col-lg-3 col-md-4 col-sm-6 col-8 text-center mx-auto d-flex flex-column justify-content-center">
+    <i class="bi bi-book-half" style="font-size: 5rem;"></i>
+    <h1 class="fw-normal mb-3" style="margin-top:-15px;">Login</h1>
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
+        method="post"
+        class="text-center d-flex flex-column justify-content-center">
+        <div class="form-floating mb-1">
+            <input type="email"
+                class="form-control <?php echo $emailErrClass; ?>"
+                id="inputEmail" placeholder="Email" autocomplete="email"
+                name="email">
+            <label for="inputEmail">Email address</label>
+        </div>
 
-    <div class="form-floating mb-2">
-      <input type="password"
-        class="form-control <?php echo $passwordErrClass; ?>" id="inputPassword"
-        placeholder="Password" autocomplete="current-password" name="password">
-      <label for="inputPassword">Password</label>
-      <div class="invalid-feedback text-start ms-2 mt-0">
-        <?php echo $loginErrText; ?>
-      </div>
-    </div>
-    <div class="form-check mx-auto mb-3">
-      <input class="form-check-input" type="checkbox" value=""
-        id="flexCheckChecked">
-      <label class="form-check-label" for="flexCheckChecked">
-        Remember me
-      </label>
-    </div>
-    <button type="submit" class="btn btn-primary btn-lg">Login</button>
-  </form>
-  <p class="mt-3 mb-5">New user? <a href="register.php">Register</a></p>
-  <p class="text-muted me-3">© Mohammad Semmo</p>
+        <div class="form-floating mb-2">
+            <input type="password"
+                class="form-control <?php echo $passwordErrClass; ?>"
+                id="inputPassword" placeholder="Password"
+                autocomplete="current-password" name="password">
+            <label for="inputPassword">Password</label>
+            <div class="invalid-feedback text-start ms-2 mt-0">
+                <?php echo $loginErrText; ?>
+            </div>
+        </div>
+        <div class="form-check mx-auto mb-3">
+            <input class="form-check-input" type="checkbox" value=""
+                id="flexCheckChecked">
+            <label class="form-check-label" for="flexCheckChecked">
+                Remember me
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+    </form>
+    <p class="mt-3 mb-5">New user? <a href="register.php">Register</a></p>
+    <p class="text-muted me-3">© Mohammad Semmo</p>
 </div>
 
 <script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-  crossorigin="anonymous"></script>
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>

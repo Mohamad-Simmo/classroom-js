@@ -5,13 +5,13 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 const sidebarClasses = document.getElementById('sidebar-btn-classes');
-const sidebarLorem = document.getElementById('sidebar-btn-lorem');
-const sidebarIpsum = document.getElementById('sidebar-btn-ipsum');
+const sidebarAssignments = document.getElementById('sidebar-btn-Assignments');
+const sidebarTests = document.getElementById('sidebar-btn-Tests');
 const containerClasses = document.getElementById('classes-page-container');
-const containerLorem = document.getElementById('lorem-container');
-const containerIpsum = document.getElementById('ipsum-container');
-const containers = [containerClasses, containerLorem, containerIpsum];
-const navs = [sidebarClasses, sidebarLorem, sidebarIpsum];
+const containerAssignments = document.getElementById('Assignments-container');
+const containerTests = document.getElementById('Tests-container');
+const containers = [containerClasses, containerAssignments, containerTests];
+const navs = [sidebarClasses, sidebarAssignments, sidebarTests];
 
 function loadPage(nav, container) {
   containers.forEach((container) => {
@@ -31,9 +31,9 @@ function loadPage(nav, container) {
 sidebarClasses.addEventListener('click', () => {
   loadPage(sidebarClasses, containerClasses);
 });
-sidebarLorem.addEventListener('click', () =>
-  loadPage(sidebarLorem, containerLorem)
+sidebarAssignments.addEventListener('click', () =>
+  loadPage(sidebarAssignments, containerAssignments)
 );
-sidebarIpsum.addEventListener('click', () => {
-  loadPage(sidebarIpsum, containerIpsum);
+sidebarTests.addEventListener('click', () => {
+  loadPage(sidebarTests, containerTests);
 });

@@ -102,7 +102,7 @@
 
     </div>
 
-    <div id="lorem-container"></div>
+    <div id="lorem-container">Assignment</div>
     <div id="ipsum-container"></div>
 
 </div>

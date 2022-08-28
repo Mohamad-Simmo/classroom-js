@@ -35,7 +35,7 @@
       <a href="javascript:void(0)"
         class="nav-link text-white d-flex align-items-center"
         id="sidebar-btn-Assignments">
-        <i class="bi bi-border-all me-md-2 me-0 fs-4"></i>
+        <i class="bi bi-journal-bookmark-fill me-md-2 me-0 fs-4"></i>
         <span class="d-none d-md-inline-block">Assignments</span>
       </a>
     </li>
@@ -43,7 +43,7 @@
       <a href="javascript:void(0)"
         class="nav-link text-white d-flex align-items-center"
         id="sidebar-btn-Tests">
-        <i class="bi bi-border-all me-md-2 me-0 fs-4"></i>
+        <i class="bi bi-file-earmark-text me-md-2 me-0 fs-4"></i>
         <span class="d-none d-md-inline-block">Tests</span>
       </a>
     </li>

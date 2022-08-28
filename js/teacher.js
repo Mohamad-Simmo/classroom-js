@@ -1,5 +1,5 @@
 //TODO: Add teacher buttons (Edit, Delete, etc.)
-document.getElementById('modal-body').innerHTML = `
+document.getElementById('modal-class-body').innerHTML = `
   <div class="row g-2 align-items-center mb-3">
     <div class="col-3">
       <label for="class-name" class="col-form-label">Class
@@ -69,7 +69,6 @@ document.getElementById('confirm-class').addEventListener('click', () => {
       if (this.readyState == 4 && this.status == 200) {
         //TODO: show response
         const response = JSON.parse(this.responseText);
-        console.log(response);
 
         //Create alert
         const wrapper = document.createElement('div');
@@ -142,7 +141,6 @@ function addPeopleForm(code) {
       let xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-          console.log(this.responseText);
           loadClassPeoplePage(code);
         }
       };
@@ -154,3 +152,42 @@ function addPeopleForm(code) {
       xmlhttp.send(`code=${code}&people=${peopleEmailsVal}`);
     });
 }
+
+let formType;
+document.querySelectorAll('.new-form').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const modal = document.getElementById('modal-new-form');
+    let modalTitle = modal.querySelector('.modal-title');
+    if (btn.id === 'new-assignment') {
+      modalTitle.innerText = 'New Assignment';
+      formType = 'assignment';
+    } else if (btn.id === 'new-test') {
+      modalTitle.innerText = 'New Test';
+      formType = 'test';
+    }
+    //select class
+    const body = modal.querySelector('.modal-form-body');
+    body.innerHTML = `
+      <select class="form-select mb-3" id="select-class">
+        <option selected disabled hidden>Select Class</option>
+      </select>
+      <input type="text" class="form-control" placeholder="Title" id="form-title"/>
+    `;
+    CLASSES.forEach((c) => {
+      const option = document.createElement('option');
+      option.innerText = c.class;
+      option.value = c.code;
+      body.querySelector('.form-select').append(option);
+    });
+    modal.querySelector('#create-form').addEventListener('click', () => {
+      const selectEl = modal.querySelector('#select-class');
+      const classCode = selectEl.value;
+      const title = modal.querySelector('#form-title').value;
+      window.open(
+        `./create_form.php?title=${title}&code=${classCode}&type=${formType}`,
+        '_blank'
+      );
+      bootstrap.Modal.getInstance(modal).hide();
+    });
+  });
+});

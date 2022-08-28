@@ -1,4 +1,4 @@
-document.getElementById('modal-body').innerHTML = `
+document.getElementById('modal-class-body').innerHTML = `
 <div class="row g-2 align-items-center mb-3">
   <div class="col-3">
     <label for="class-code" class="col-form-label">Class Code</label>

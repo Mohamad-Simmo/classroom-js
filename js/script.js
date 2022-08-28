@@ -6,6 +6,7 @@ const tooltipList = [...tooltipTriggerList].map(
   (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
 );
 
+let CLASSES = [];
 function loadClasses() {
   //remove old container
   if ((el = document.getElementById('classes-container'))) {
@@ -15,11 +16,11 @@ function loadClasses() {
   if ((el = document.getElementById('class-container'))) {
     el.remove();
   }
-
   document.getElementById('content-title').innerText = 'Classes';
   let xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
+      CLASSES = [];
       let response = JSON.parse(this.responseText);
       const wrapper = document.createElement('div');
       wrapper.id = 'classes-container';
@@ -57,6 +58,8 @@ function loadClasses() {
         );
         div.appendChild(card);
         wrapper.appendChild(div);
+
+        CLASSES.push({ class: response[row].name, code: response[row].code });
       }
       document.getElementById('classes-page-container').appendChild(wrapper);
     }
@@ -100,13 +103,13 @@ function loadClass(code, name, description = '') {
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
           <ul class="navbar-nav fs-5">
             <li class="nav-item">
-              <a id="class-nav-announcements" class="nav-link me-3 active" href="#">Announcements</a>
+              <a id="class-nav-announcements" class="nav-link me-3 active" href="javascript:void(0)">Announcements</a>
             </li>
             <li class="nav-item">
-              <a id="class-nav-people" class="nav-link me-3" href="#">People</a>
+              <a id="class-nav-people" class="nav-link me-3" href="javascript:void(0)">People</a>
             </li>
             <li class="nav-item">
-              <a id="class-nav-info" class="nav-link me-3" href="#">Info</a>
+              <a id="class-nav-info" class="nav-link me-3" href="javascript:void(0)">Info</a>
             </li>
           </ul>
         </div>

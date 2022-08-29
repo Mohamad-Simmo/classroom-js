@@ -59,7 +59,11 @@ function loadClasses() {
         div.appendChild(card);
         wrapper.appendChild(div);
 
-        CLASSES.push({ class: response[row].name, code: response[row].code });
+        CLASSES.push({
+          class: response[row].name,
+          code: response[row].code,
+          id: response[row].id,
+        });
       }
       document.getElementById('classes-page-container').appendChild(wrapper);
     }
@@ -314,4 +318,41 @@ function loadClassInfoPage(code) {
   };
   xmlhttp.open('GET', 'api/getClassInfo.php?code=' + code, true);
   xmlhttp.send();
+}
+
+function loadForms(type) {
+  if (type === 'assignments') {
+    fetch(`api/getForms.php?type=${type}`)
+      .then((res) => res.json())
+      .then((res) => {
+        try {
+          document.getElementById(`${type}-container`).remove();
+        } catch {}
+        const wrapper = document.createElement('div');
+        wrapper.id = `${type}-container`;
+        wrapper.classList.add('row', 'g-3');
+        for (let index in res) {
+          const row = res[index];
+          console.log(row);
+          const div = document.createElement('div');
+          div.classList.add('col-12', 'col-md-6', 'col-lg-4');
+          const card = document.createElement('div');
+          card.classList.add('card');
+          card.style.cursor = 'pointer';
+          card.innerHTML = `
+            <div class="card-body">
+              <h5 class="card-title">${row['class_name']} - ${row['title']}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Due Date</h6>
+              <p class="card-text">Notes</p>
+            </div>
+          `;
+          card.addEventListener('click', () => {
+            loadForm(row['id']);
+          });
+          div.append(card);
+          wrapper.append(div);
+        }
+        document.getElementById(`${type}-page-container`).append(wrapper);
+      });
+  }
 }

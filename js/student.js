@@ -40,3 +40,9 @@ document.getElementById('join-class').addEventListener('click', () => {
     modal.hide();
   }
 });
+
+function loadForm(id) {
+  //request the form
+  //display the form
+  window.location.href = `./form.php?id=${id}`;
+}

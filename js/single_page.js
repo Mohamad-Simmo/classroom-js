@@ -27,6 +27,10 @@ function loadPage(nav, container) {
   container.style.display = 'block';
   if (container === containerClasses) {
     loadClasses();
+  } else if (container === containerAssignments) {
+    loadForms('assignments');
+  } else if (container === containerTests) {
+    loadForms('tests');
   }
 }
 

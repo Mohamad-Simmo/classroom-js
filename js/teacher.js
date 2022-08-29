@@ -171,7 +171,39 @@ document.querySelectorAll('.new-form').forEach((btn) => {
       <select class="form-select mb-3" id="select-class">
         <option selected disabled hidden>Select Class</option>
       </select>
-      <input type="text" class="form-control" placeholder="Title" id="form-title"/>
+      <input type="text" class="form-control mb-3" placeholder="Title" id="form-title"/>
+      <div class="row mb-3 align-items-center">
+        <div class="col-3 text-center">
+            <label for="start-date">Start Date</label>
+        </div>
+        <div class="col-9">
+            <input type="date" class="form-control" id="start-date"/>
+        </div>
+        </div>
+        <div class="row mb-3 align-items-center">
+            <div class="col-3 text-center">
+                <label for="start-time">Start Time</label>
+            </div>
+            <div class="col-9">
+                <input type="time" class="form-control" id="start-time"/>
+            </div>
+        </div>
+        <div class="row mb-3 align-items-center">
+            <div class="col-3 text-center">
+                <label for="end-date">End Date</label>
+            </div>
+            <div class="col-9">
+                <input type="date" class="form-control" id="end-date"/>
+            </div>
+        </div>
+        <div class="row mb-3 align-items-center">
+            <div class="col-3 text-center">
+                <label for="end-time">End Time</label>
+            </div>
+            <div class="col-9">
+                <input type="time" class="form-control" id="end-time"/>
+            </div>
+        </div>
     `;
     CLASSES.forEach((c) => {
       const option = document.createElement('option');
@@ -179,15 +211,25 @@ document.querySelectorAll('.new-form').forEach((btn) => {
       option.value = c.code;
       body.querySelector('.form-select').append(option);
     });
-    modal.querySelector('#create-form').addEventListener('click', () => {
-      const selectEl = modal.querySelector('#select-class');
-      const classCode = selectEl.value;
-      const title = modal.querySelector('#form-title').value;
-      window.open(
-        `./create_form.php?title=${title}&code=${classCode}&type=${formType}`,
-        '_blank'
-      );
-      bootstrap.Modal.getInstance(modal).hide();
-    });
+
+    const createBtn = modal.querySelector('#create-form');
+    if (createBtn.getAttribute('listener') !== 'true') {
+      createBtn.addEventListener('click', (event) => {
+        createBtn.setAttribute('listener', 'true');
+        const selectEl = modal.querySelector('#select-class');
+        const classCode = selectEl.value;
+        const title = modal.querySelector('#form-title').value;
+        const startDate = modal.querySelector('#start-date').value;
+        const startTime = modal.querySelector('#start-time').value;
+        const endDate = modal.querySelector('#end-date').value;
+        const endTime = modal.querySelector('#end-time').value;
+        window.location.href = `./create_form.php?title=${title}&code=${classCode}&type=${formType}&start_d=${startDate}&start_t=${startTime}&end_d=${endDate}&end_t=${endTime}`;
+        bootstrap.Modal.getInstance(modal).toggle();
+      });
+    }
   });
 });
+
+function loadForm() {
+  console.log('teacher');
+}

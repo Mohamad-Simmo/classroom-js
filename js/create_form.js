@@ -8,6 +8,29 @@ form.addEventListener('click', (event) => {
 });
 addQ.click();
 
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const formObj = {
+    title: urlParams.get('title'),
+    code: urlParams.get('code'),
+    type: urlParams.get('type'),
+    startDate: urlParams.get('start_d'),
+    startTime: urlParams.get('start_t'),
+    endDate: urlParams.get('end_d'),
+    endTime: urlParams.get('end_t'),
+    questions: questionsObj(),
+  };
+  fetch('api/addForm.php', {
+    method: 'POST',
+    body: JSON.stringify(formObj),
+  })
+    .then((res) => res.text())
+    .then((text) => console.log(text));
+});
+
 function addQuestion(event) {
   event.preventDefault();
   const question = document.createElement('div');
@@ -76,12 +99,12 @@ function questionsObj() {
       const isCorrect = c.querySelector('.btn-success') ? true : false;
       choices.push({ choice: choice, isCorrect: isCorrect });
     });
-    const grade = q.children[2].querySelector('.grade').value;
+    const grade = parseInt(q.children[2].querySelector('.grade').value);
     questions.push({
       question: question,
       choices: choices,
       grade: grade,
     });
   });
-  console.log(JSON.stringify(questions));
+  return questions;
 }

@@ -7,12 +7,16 @@
   //get forms for user joined classes
   $query = "SELECT $type.form_id as id, forms.title, forms.start_date_time,
               forms.end_date_time, classes.name as class_name
-            FROM assignments
-            JOIN forms ON assignments.form_id = forms.id
+            FROM $type
+            JOIN forms ON $type.form_id = forms.id
             JOIN classes ON classes.id = forms.class_id
             JOIN users_classes ON users_classes.class_id = classes.id
             JOIN users ON users.id = users_classes.user_id
-            WHERE users.id = $userId";
+            WHERE users.id = $userId AND $userId NOT IN (
+              SELECT form_submissions.user_id
+              FROM form_submissions
+              WHERE user_id = $userId AND form_submissions.form_id = $type.form_id
+            )";
 
   $result = mysqli_query($conn, $query);
 

@@ -65,7 +65,7 @@
   <div id="classes-page-container">
 
     <div class="content-header d-flex gap-3 align-items-center mb-3">
-      <h1 id="content-title" class="d-inline">Classes</h1>
+      <h1 class="d-inline content-title">Classes</h1>
       <button type="button" class="btn btn-link p-0" id="new-class-btn"
         data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i
           class="bi bi-plus-circle fs-2" data-bs-toggle="tooltip"
@@ -106,30 +106,30 @@
   </div>
 
   <div id="assignments-page-container">
-    <h1 id="content-title">Assignments</h1>
+    <h1 class="content-title">Assignments</h1>
     <?php
       echo $_SESSION["type"] == 0 ?
         '<a href="javascript:void(0)">
-            <button id="new-assignment" class="btn btn-primary new-form" data-bs-toggle="modal" data-bs-target="#modal-new-form">
+            <button id="new-assignment" class="btn btn-primary new-form mb-3" data-bs-toggle="modal" data-bs-target="#modal-new-form">
               Create New Assignment
             </button>
         </a>':
-        'TODO DISPLAY ASSIGNMENTS';
+        '';
     ?>
 
 
   </div>
 
   <div id="tests-page-container">
-    <h1 id="content-title">Tests</h1>
+    <h1 class="content-title">Tests</h1>
     <?php
             echo $_SESSION["type"] == 0 ?
                 '<a href="javascript:void(0)">
-                    <button id="new-test" class="btn btn-primary new-form" data-bs-toggle="modal" data-bs-target="#modal-new-form">
+                    <button id="new-test" class="btn btn-primary new-form mb-3" data-bs-toggle="modal" data-bs-target="#modal-new-form">
                       Create New Test
                     </button>
                 </a>':
-                'TODO DISPLAY TESTS';
+                '';
         ?>
   </div>
 

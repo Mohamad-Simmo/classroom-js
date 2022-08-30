@@ -43,18 +43,47 @@
       $questions[] = $current;
     }
     $grade = 0;
+   /*  $key = array_search('question 1', array_column($questions[], 'question'));
+    echo $key; */
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      //correct the form
+      foreach ($_POST as $key => $value) {
+        $key = array_slice(explode("-", $key), 1)[0];
+        $value = array_slice(explode("-", $value), 1)[0];
+        //get question index
+        $questionIndex = array_search($key, array_column($questions, 'id'));
+        //get grade of question
+        $questionGrade = $questions[$questionIndex]["grade"];
+        //get choice for question
+        $choiceIndex = array_search(
+          $value, array_column($questions[$questionIndex]["choices"], 'id')
+        );
+        //check if choice is correct
+        if ($questions[$questionIndex]["choices"][$choiceIndex]["is_correct"])
+          $grade += $questionGrade;
+      }
+      $query = "INSERT INTO form_submissions
+                VALUES(
+                  DEFAULT, $formId, $userId, DEFAULT, $grade
+                )";
+      mysqli_query($conn, $query);
+      header('Location: ./index.php');
+    }
+    
 ?>
 
 <div class="container p-3">
-  <form action="javascript:void(0)">
+  <form action="form.php?id=<?=$formId?>" method="post">
     <?php foreach($questions as $q) { ?>
     <div class="border rounded bg-white p-3 mb-3">
       <p class="fs-4"><?= $q["question"] ." (grade: ".$q["grade"].")" ?></p>
       <?php foreach($q["choices"] as $c) {?>
       <div class="form-check fs-5">
-        <input class="form-check-input" type="radio" name="<?= $q["id"] ?>"
-          id="<?= $c["id"] ?>">
-        <label class="form-check-label" for="<?= $c["id"] ?>">
+        <input class="form-check-input" type="radio"
+          name="question-<?= $q["id"] ?>" id="choice-<?= $c["id"] ?>"
+          value="choice-<?= $c["id"] ?>">
+        <label class="form-check-label" for="choice-<?= $c["id"] ?>">
           <?= $c["choice"] ?>
         </label>
       </div>

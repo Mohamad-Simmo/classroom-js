@@ -8,6 +8,7 @@ form.addEventListener('click', (event) => {
 });
 addQ.click();
 
+//TODO: REDIRECT
 form.addEventListener('submit', (event) => {
   event.preventDefault();
 
@@ -27,8 +28,7 @@ form.addEventListener('submit', (event) => {
     method: 'POST',
     body: JSON.stringify(formObj),
   })
-    .then((res) => res.text())
-    .then((text) => console.log(text));
+    .then((res) => res.text());
 });
 
 function addQuestion(event) {

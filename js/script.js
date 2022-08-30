@@ -16,7 +16,10 @@ function loadClasses() {
   if ((el = document.getElementById('class-container'))) {
     el.remove();
   }
-  document.getElementById('content-title').innerText = 'Classes';
+  const parent = document.getElementById('classes-page-container');
+  document.getElementById('new-class-btn').classList.remove('d-none');
+  parent.querySelector('.content-title').classList.remove('d-none');
+
   let xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -74,8 +77,9 @@ function loadClasses() {
 
 function loadClass(code, name, description = '') {
   //hide classes header
+  const parent = document.getElementById('classes-page-container');
   document.getElementById('new-class-btn').classList.add('d-none');
-  document.getElementById('content-title').classList.add('d-none');
+  parent.querySelector('.content-title').classList.add('d-none');
   //if there is an alert remove it
   document.getElementById('liveAlertPlaceholder').innerHTML = '';
   //remove classes element
@@ -214,7 +218,6 @@ function postClassAnnouncement(event, code) {
   let title = document.getElementById('announcement-title');
   let body = document.getElementById('announcement-body');
   let err = document.getElementById('post-error');
-  //TODO: if both are empty invalid
   if (!title.value && !body.value) {
     title.classList.add('is-invalid');
     body.classList.add('is-invalid');
@@ -321,38 +324,58 @@ function loadClassInfoPage(code) {
 }
 
 function loadForms(type) {
-  if (type === 'assignments') {
-    fetch(`api/getForms.php?type=${type}`)
-      .then((res) => res.json())
-      .then((res) => {
-        try {
-          document.getElementById(`${type}-container`).remove();
-        } catch {}
-        const wrapper = document.createElement('div');
-        wrapper.id = `${type}-container`;
-        wrapper.classList.add('row', 'g-3');
-        for (let index in res) {
-          const row = res[index];
-          console.log(row);
-          const div = document.createElement('div');
-          div.classList.add('col-12', 'col-md-6', 'col-lg-4');
-          const card = document.createElement('div');
-          card.classList.add('card');
-          card.style.cursor = 'pointer';
-          card.innerHTML = `
+  //show header
+  const parent = document.getElementById(`${type}-page-container`);
+  if ((el = parent.querySelector('#form-container'))) {
+    el.remove();
+  }
+  parent.querySelector('.content-title').classList.remove('d-none');
+  parent.querySelector(`#new-${type.slice(0, -1)}`).classList.remove('d-none');
+
+  fetch(`api/getForms.php?type=${type}`)
+    .then((res) => res.json())
+    .then((res) => {
+      try {
+        document.getElementById(`${type}-container`).remove();
+      } catch {}
+      const wrapper = document.createElement('div');
+      wrapper.id = `${type}-container`;
+      wrapper.classList.add('row', 'g-3');
+      for (let index in res) {
+        const row = res[index];
+        const div = document.createElement('div');
+        div.classList.add('col-12', 'col-md-6', 'col-lg-4');
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.style.cursor = 'pointer';
+        card.innerHTML = `
             <div class="card-body">
               <h5 class="card-title">${row['class_name']} - ${row['title']}</h5>
               <h6 class="card-subtitle mb-2 text-muted">Due Date</h6>
               <p class="card-text">Notes</p>
             </div>
           `;
-          card.addEventListener('click', () => {
-            loadForm(row['id']);
-          });
-          div.append(card);
-          wrapper.append(div);
-        }
-        document.getElementById(`${type}-page-container`).append(wrapper);
-      });
+        card.addEventListener('click', () => {
+          loadForm(row['id'], type, `${row['class_name']} - ${row['title']}`);
+        });
+        div.append(card);
+        wrapper.append(div);
+      }
+      document.getElementById(`${type}-page-container`).append(wrapper);
+    });
+}
+
+function formValid(element, bool = true) {
+  if (Array.isArray(element)) {
+    element.forEach((el) => formValid(el, bool));
+    return;
   }
+
+  if (bool) {
+    element.classList.add('is-valid');
+    element.classList.remove('is-invalid');
+    return;
+  }
+  element.classList.remove('is-valid');
+  element.classList.add('is-invalid');
 }

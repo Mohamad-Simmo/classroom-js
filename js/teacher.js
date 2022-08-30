@@ -1,4 +1,3 @@
-//TODO: Add teacher buttons (Edit, Delete, etc.)
 document.getElementById('modal-class-body').innerHTML = `
   <div class="row g-2 align-items-center mb-3">
     <div class="col-3">
@@ -67,7 +66,6 @@ document.getElementById('confirm-class').addEventListener('click', () => {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        //TODO: show response
         const response = JSON.parse(this.responseText);
 
         //Create alert
@@ -169,7 +167,7 @@ document.querySelectorAll('.new-form').forEach((btn) => {
     const body = modal.querySelector('.modal-form-body');
     body.innerHTML = `
       <select class="form-select mb-3" id="select-class">
-        <option selected disabled hidden>Select Class</option>
+        <option selected disabled hidden value>Select Class</option>
       </select>
       <input type="text" class="form-control mb-3" placeholder="Title" id="form-title"/>
       <div class="row mb-3 align-items-center">
@@ -216,20 +214,157 @@ document.querySelectorAll('.new-form').forEach((btn) => {
     if (createBtn.getAttribute('listener') !== 'true') {
       createBtn.addEventListener('click', (event) => {
         createBtn.setAttribute('listener', 'true');
-        const selectEl = modal.querySelector('#select-class');
-        const classCode = selectEl.value;
-        const title = modal.querySelector('#form-title').value;
-        const startDate = modal.querySelector('#start-date').value;
-        const startTime = modal.querySelector('#start-time').value;
-        const endDate = modal.querySelector('#end-date').value;
-        const endTime = modal.querySelector('#end-time').value;
-        window.location.href = `./create_form.php?title=${title}&code=${classCode}&type=${formType}&start_d=${startDate}&start_t=${startTime}&end_d=${endDate}&end_t=${endTime}`;
-        bootstrap.Modal.getInstance(modal).toggle();
+        //FORM VALIDATION
+        let error = false;
+        let datesError = false;
+
+        const selectClass = modal.querySelector('#select-class');
+        const classCode = selectClass.value;
+        if (classCode.trim().length !== 13) {
+          formValid(selectClass, false);
+          error = true;
+        } else formValid(selectClass, true);
+
+        const titleEl = modal.querySelector('#form-title');
+        const title = titleEl.value;
+        if (title.trim().length == 0) {
+          formValid(titleEl, false);
+          error = true;
+        } else formValid(titleEl, true);
+
+        const startDateEl = modal.querySelector('#start-date');
+        const startDate = startDateEl.value;
+        if (startDate.trim().length == 0) {
+          formValid(startDateEl, false);
+          datesError = true;
+        } else formValid(startDateEl, true);
+
+        const startTimeEl = modal.querySelector('#start-time');
+        const startTime = startTimeEl.value;
+        if (startTime.trim().length == 0) {
+          formValid(startTimeEl, false);
+          datesError = true;
+        } else formValid(startTimeEl, true);
+
+        const endDateEl = modal.querySelector('#end-date');
+        const endDate = endDateEl.value;
+        if (endDate.trim().length == 0) {
+          formValid(endDateEl, false);
+          datesError = true;
+        } else formValid(endDateEl, true);
+
+        const endTimeEl = modal.querySelector('#end-time');
+        const endTime = endTimeEl.value;
+        if (endTime.trim().length == 0) {
+          formValid(endTimeEl, false);
+          datesError = true;
+        } else formValid(endTimeEl, true);
+
+        const start = new Date(`${startDate} ${startTime}`);
+        const end = new Date(`${endDate} ${endTime}`);
+        const dateElements = [startDateEl, startTimeEl, endDateEl, endTimeEl];
+
+        // if date fields are valid compare dates
+        if (!datesError) {
+          if (start >= end) {
+            formValid(dateElements, false);
+            error = true;
+          } else {
+            formValid(dateElements, true);
+          }
+        }
+
+        if (!error) {
+          window.location.href = `
+            ./create_form.php?title=${title}&code=${classCode}&type=${formType}&start_d=${startDate}&start_t=${startTime}&end_d=${endDate}&end_t=${endTime}
+          `;
+          bootstrap.Modal.getInstance(modal).toggle();
+        }
       });
     }
   });
 });
 
-function loadForm() {
-  console.log('teacher');
+function loadForm(id, type, name) {
+  const parent = document.getElementById(`${type}-page-container`);
+  //hide header
+  parent.querySelector('.content-title').classList.add('d-none');
+  parent.querySelector(`#new-${type.slice(0, -1)}`).classList.add('d-none');
+  //remove children
+  document.getElementById(`${type}-container`).replaceChildren();
+
+  const form = document.createElement('div');
+  form.id = 'form-container';
+  form.innerHTML = `
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary" style="margin-inline: -1rem;">
+      <div class="container-fluid">
+        <div class="navbar-brand mb-0 h1 fs-2 fw-normal">
+          ${name}
+        </div>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarForm"
+          aria-controls="navbarForm"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarForm">
+          <ul class="navbar-nav fs-5">
+            <li class="nav-item">
+              <a id="form-submissions" class="nav-link me-3 active" href="javascript:void(0)">
+                Submissions
+              </a>
+            </li>
+            <li class="nav-item">
+              <a id="form-review" class="nav-link me-3" href="javascript:void(0)">
+                Review
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  `;
+  //TODO: GET SUBMISSION DATA
+  fetch(`api/getSubmissions.php?id=${id}`)
+    .then((res) => res.json())
+    .then((res) => {
+      console.log(res);
+      const table = document.createElement('table');
+      table.classList.add('table');
+      const thead = document.createElement('thead');
+      thead.innerHTML = [
+        '<tr>',
+        '<th scope="col">#</th>',
+        '<th scope="col">First</th>',
+        '<th scope="col">Last</th>',
+        '<th scope="col">Email</th>',
+        '<th scope="col">Grade</th>',
+        '<th scope="col">Submit Time</th>',
+        '</tr>',
+      ].join('');
+      const tbody = document.createElement('tbody');
+      for (let row in res) {
+        tbody.innerHTML += [
+          '<tr>',
+          `<th scope="row">${row}</th>`,
+          `<td>${res[row]['fname']}</td>`,
+          `<td>${res[row]['lname']}</td>`,
+          `<td>${res[row]['email']}</td>`,
+          `<td>${res[row]['grade']}</td>`,
+          `<td>${res[row]['date_time']}</td>`,
+          '</tr>',
+        ].join('');
+      }
+      table.appendChild(thead);
+      table.appendChild(tbody);
+
+      form.appendChild(table);
+    });
+
+  parent.appendChild(form);
 }

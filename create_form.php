@@ -8,13 +8,20 @@
     }
 ?>
 
-<div class="container p-5" id="page">
-  <h1>Assignment</h1>
+<div class="container py-3" id="page">
+
+  <h1 class="mb-3">Assignment: <?= $_GET["title"] ?></h1>
   <form action="#" id="questions">
     <button class="btn btn-secondary" data-role="add-q">
       Add Question
     </button>
-    <input type="submit" class="btn btn-primary" />
+
+    <h5 class="ms-3 d-inline" id="grade-container">
+      Grade <span id="totalGrade">0</span>/100
+    </h5>
+    <br>
+    <input type="submit" class="btn btn-primary my-3" />
+    <p id="error" class="text-danger fs-5"></p>
   </form>
 </div>
 

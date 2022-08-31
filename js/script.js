@@ -330,7 +330,11 @@ function loadForms(type) {
     el.remove();
   }
   parent.querySelector('.content-title').classList.remove('d-none');
-  parent.querySelector(`#new-${type.slice(0, -1)}`).classList.remove('d-none');
+  if (document.contains(parent.querySelector(`#new-${type.slice(0, -1)}`))) {
+    parent
+      .querySelector(`#new-${type.slice(0, -1)}`)
+      .classList.remove('d-none');
+  }
 
   fetch(`api/getForms.php?type=${type}`)
     .then((res) => res.json())

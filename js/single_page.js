@@ -37,9 +37,9 @@ function loadPage(nav, container) {
 sidebarClasses.addEventListener('click', () => {
   loadPage(sidebarClasses, containerClasses);
 });
-sidebarAssignments.addEventListener('click', () =>
-  loadPage(sidebarAssignments, containerAssignments)
-);
+sidebarAssignments.addEventListener('click', () => {
+  loadPage(sidebarAssignments, containerAssignments);
+});
 sidebarTests.addEventListener('click', () => {
   loadPage(sidebarTests, containerTests);
 });

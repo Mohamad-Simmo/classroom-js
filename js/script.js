@@ -275,7 +275,7 @@ function loadClassPeoplePage(code) {
       for (let row in response) {
         tbody.innerHTML += `
         <tr>
-          <th scope="row">${row}</th>
+          <th scope="row">${parseInt(row) + 1}</th>
           <td>${response[row].type == 1 ? 'Student' : 'Teacher'}</td>
           <td>${response[row].fname}</td>
           <td>${response[row].lname}</td>
@@ -323,20 +323,28 @@ function loadClassInfoPage(code) {
   xmlhttp.send();
 }
 
-function loadForms(type) {
+//TODO
+async function loadForms(type) {
   //show header
   const parent = document.getElementById(`${type}-page-container`);
   if ((el = parent.querySelector('#form-container'))) {
     el.remove();
   }
   parent.querySelector('.content-title').classList.remove('d-none');
+  if (parent.children[1] && parent.children[2]) {
+    //show hr
+    parent.children[1].classList.remove('d-none');
+    //show subtitle
+    parent.children[2].classList.remove('d-none');
+  }
+
   if (document.contains(parent.querySelector(`#new-${type.slice(0, -1)}`))) {
     parent
       .querySelector(`#new-${type.slice(0, -1)}`)
       .classList.remove('d-none');
   }
 
-  fetch(`api/getForms.php?type=${type}`)
+  return fetch(`api/getForms.php?type=${type}`)
     .then((res) => res.json())
     .then((res) => {
       try {
@@ -349,18 +357,21 @@ function loadForms(type) {
         const row = res[index];
         const div = document.createElement('div');
         div.classList.add('col-12', 'col-md-6', 'col-lg-4');
+        div.setAttribute(`data-form-${type}`, row['id']);
         const card = document.createElement('div');
-        card.classList.add('card');
+        card.classList.add('card', 'position-relative');
         card.style.cursor = 'pointer';
-        card.innerHTML = `
-            <div class="card-body">
-              <h5 class="card-title">${row['class_name']} - ${row['title']}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Due Date</h6>
-              <p class="card-text">Notes</p>
-            </div>
-          `;
+        let d = new Date(row['end_date_time']);
+        const date = d.toDateString();
+        const time = d.toTimeString().slice(0, 5);
+        card.innerHTML = [
+          '<div class="card-body">',
+          `<h5 class="card-title">${row['class_name']} - ${row['title']}</h5>`,
+          `<h6 class="card-subtitle mb-2 text-muted">Due Date ${date} at ${time}</h6>`,
+          '</div>',
+        ].join('');
         card.addEventListener('click', () => {
-          loadForm(row['id'], type, `${row['class_name']} - ${row['title']}`);
+          loadForm(row['id'], type, row['title'], row['class_name']);
         });
         div.append(card);
         wrapper.append(div);

@@ -1,25 +1,32 @@
 <?php
-    $title = "form";
+    $title = $_GET["class"]." - ".$_GET["title"];
     include('partials/header.php');
     if(!(isset($_SESSION["loggedin"])) || $_SESSION["loggedin"] === false || $_SESSION["type"] != 1){
       die("Unauthorized");
     }
+    
     $userId = $_SESSION["id"];
     $formId = $_GET["id"];
-    $query = "SELECT assignments.form_id as id, forms.title, forms.start_date_time,
+    $type = $_GET["type"];
+    //check if user is in class and has not submitted
+    $query = "SELECT $type.form_id as id, forms.title, forms.start_date_time,
                 forms.end_date_time, classes.name as class_name
-              FROM assignments
-              JOIN forms ON assignments.form_id = forms.id
+              FROM $type
+              JOIN forms ON $type.form_id = forms.id
               JOIN classes ON classes.id = forms.class_id
               JOIN users_classes ON users_classes.class_id = classes.id
               JOIN users ON users.id = users_classes.user_id
-              WHERE users.id = $userId AND forms.id = $formId";
+              WHERE users.id = $userId AND forms.id = $formId
+              AND (forms.id, users.id) NOT IN (
+                SELECT form_submissions.form_id, form_submissions.user_id
+                FROM form_submissions
+              )";
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) == 0) {
       die("Unauthorized");
     }
 
-    $query = "SELECT * FROM forms WHERE id=$formId";
+    $query = "SELECT form_id as id FROM $type WHERE form_id =$formId";
     $result = mysqli_fetch_assoc(mysqli_query($conn, $query));
 
     //get questions
@@ -74,7 +81,10 @@
 ?>
 
 <div class="container p-3">
-  <form action="form.php?id=<?=$formId?>" method="post">
+  <h1 class="text-center"><?= $_GET["title"] ?></h1>
+  <form
+    action="form.php?id=<?=$formId?>&type=<?=$type?>&title=<?=$_GET["title"]?>&class=<?=$_GET["class"]?>"
+    method="post">
     <?php foreach($questions as $q) { ?>
     <div class="border rounded bg-white p-3 mb-3">
       <p class="fs-4"><?= $q["question"] ." (grade: ".$q["grade"].")" ?></p>
@@ -82,7 +92,7 @@
       <div class="form-check fs-5">
         <input class="form-check-input" type="radio"
           name="question-<?= $q["id"] ?>" id="choice-<?= $c["id"] ?>"
-          value="choice-<?= $c["id"] ?>">
+          value="choice-<?= $c["id"] ?>" required>
         <label class="form-check-label" for="choice-<?= $c["id"] ?>">
           <?= $c["choice"] ?>
         </label>
@@ -90,7 +100,7 @@
       <?php } ?>
     </div>
     <?php } ?>
-    <input type="submit">
+    <div class="d-grid"><input type="submit" class="btn btn-primary"></div>
   </form>
 </div>
 

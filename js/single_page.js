@@ -1,7 +1,6 @@
 window.addEventListener('DOMContentLoaded', () => {
   //default load classes
   loadPage(sidebarClasses, containerClasses);
-  console.log(type);
 });
 
 const sidebarClasses = document.getElementById('sidebar-btn-classes');
@@ -12,10 +11,11 @@ const containerAssignments = document.getElementById(
   'assignments-page-container'
 );
 const containerTests = document.getElementById('tests-page-container');
+
 const containers = [containerClasses, containerAssignments, containerTests];
 const navs = [sidebarClasses, sidebarAssignments, sidebarTests];
 
-function loadPage(nav, container) {
+async function loadPage(nav, container) {
   containers.forEach((container) => {
     container.style.display = 'none';
   });
@@ -28,9 +28,13 @@ function loadPage(nav, container) {
   if (container === containerClasses) {
     loadClasses();
   } else if (container === containerAssignments) {
-    loadForms('assignments');
+    await loadForms('assignments');
+    if (type === 0) addSubmitCount('assignments');
   } else if (container === containerTests) {
-    loadForms('tests');
+    await loadForms('tests');
+    if (type === 0) addSubmitCount('tests');
+  } else {
+    loadGrades();
   }
 }
 

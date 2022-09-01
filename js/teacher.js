@@ -290,6 +290,10 @@ function loadForm(id, type, name) {
   //hide header
   parent.querySelector('.content-title').classList.add('d-none');
   parent.querySelector(`#new-${type.slice(0, -1)}`).classList.add('d-none');
+  //hide hr
+  parent.children[1].classList.add('d-none');
+  //hide subtitle
+  parent.children[2].classList.add('d-none');
   //remove children
   document.getElementById(`${type}-container`).replaceChildren();
 
@@ -319,11 +323,6 @@ function loadForm(id, type, name) {
                 Submissions
               </a>
             </li>
-            <li class="nav-item">
-              <a id="form-review" class="nav-link me-3" href="javascript:void(0)">
-                Review
-              </a>
-            </li>
           </ul>
         </div>
       </div>
@@ -333,7 +332,6 @@ function loadForm(id, type, name) {
   fetch(`api/getSubmissions.php?id=${id}`)
     .then((res) => res.json())
     .then((res) => {
-      console.log(res);
       const table = document.createElement('table');
       table.classList.add('table');
       const thead = document.createElement('thead');
@@ -351,7 +349,7 @@ function loadForm(id, type, name) {
       for (let row in res) {
         tbody.innerHTML += [
           '<tr>',
-          `<th scope="row">${row}</th>`,
+          `<th scope="row">${parseInt(row) + 1}</th>`,
           `<td>${res[row]['fname']}</td>`,
           `<td>${res[row]['lname']}</td>`,
           `<td>${res[row]['email']}</td>`,
@@ -367,4 +365,23 @@ function loadForm(id, type, name) {
     });
 
   parent.appendChild(form);
+}
+
+function addSubmitCount(type) {
+  document.querySelectorAll(`[data-form-${type}]`).forEach((el) => {
+    let id;
+    if (type === 'assignments') {
+      id = el.dataset.formAssignments;
+    } else if (type === 'tests') {
+      id = el.dataset.formTests;
+    }
+    fetch(`api/getSubmissions.php?id=${id}&count`)
+      .then((res) => res.text())
+      .then((res) => {
+        const span = document.createElement('span');
+        span.classList.add('badge', 'text-bg-secondary', 'p-2');
+        span.innerText = 'Submissions: ' + res;
+        el.querySelector('.card-body').appendChild(span);
+      });
+  });
 }

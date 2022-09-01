@@ -51,7 +51,7 @@ form.addEventListener('submit', (event) => {
     fetch('api/addForm.php', {
       method: 'POST',
       body: JSON.stringify(formObj),
-    }).then((window.location.href = 'university-project/index'));
+    }).then((window.location.href = './'));
   } else {
     document.getElementById('error').innerText = [...errMsg].join('\n');
   }
@@ -140,7 +140,6 @@ function deleteChoice(event) {
 
 function deleteQuestion(event) {
   event.preventDefault();
-  console.log('Delete q ');
   if (event.target.nodeName === 'I') {
     target = event.target.parentElement;
   } else {

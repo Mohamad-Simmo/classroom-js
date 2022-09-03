@@ -1,6 +1,13 @@
 # Classroom-web-app
 Online Classroom Management System.
 
+## Technologies Used
+- PHP
+- JavaScript
+- HTML5
+- CSS3
+- Bootstrap 5
+
 ## Features
 - [Create a teacher account](#register)
   - [Create class](#create-class)

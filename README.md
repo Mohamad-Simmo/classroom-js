@@ -11,7 +11,7 @@ Online Classroom Management System.
     - [View submissions](#view-submissions)
 - [Create a student account](#register)
   - [Join classes](#join-class)
-  - [Post announcements](#post-announcement)
+    - [Post announcements](#post-announcement)
   - [Solve assignments and tests](#solve-assignments-and-tests)
   - [Receive grades](#view-grades)
 
